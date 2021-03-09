@@ -8,6 +8,7 @@ export default class App extends Component {
   state = {
     output: '',
     leftOperand: null,
+    operator: null,
     calculatorButtons: [
       { value: 'c', callback: () => this.clearState() },
       { value: '1', callback: () => this.updateOutput('1') },
@@ -32,6 +33,7 @@ export default class App extends Component {
     this.setState({
       output: '',
       leftOperand: null,
+      operator: null
     });
   }
 
@@ -71,21 +73,57 @@ export default class App extends Component {
     });
   }
 
+  setOperator(value) {
+    this.setState({
+      operator: value
+    });
+  }
+
   evaluate(operator = null) {
     if (!this.state.leftOperand && operator) {
       this.setLeftOperand(parseFloat(this.state.output));
+      this.setOperator(operator);
       this.clearOutput();
     }
     else if (operator) {
-      // TODO: Evaluate independent operations.
-      const evaluation = this.state.leftOperand + parseFloat(this.state.output);
+      let evaluation;
+      switch (operator) {
+        case '-':
+          evaluation = this.state.leftOperand - parseFloat(this.state.output);
+          break;
+        case '+':
+          evaluation = this.state.leftOperand + parseFloat(this.state.output);
+          break;
+        case '/':
+          evaluation = this.state.leftOperand / parseFloat(this.state.output);
+          break;
+        case '*':
+          evaluation = this.state.leftOperand * parseFloat(this.state.output);
+          break;
+      }
       this.setLeftOperand(evaluation);
+      this.setOperator(operator);
       this.clearOutput();
     }
     else {
-      const evaluation = this.state.leftOperand + parseFloat(this.state.output);
-      this.setOutput(evaluation);
+      let evaluation;
+      switch (this.state.operator) {
+        case '-':
+          evaluation = this.state.leftOperand - parseFloat(this.state.output);
+          break;
+        case '+':
+          evaluation = this.state.leftOperand + parseFloat(this.state.output);
+          break;
+        case '/':
+          evaluation = this.state.leftOperand / parseFloat(this.state.output);
+          break;
+        case '*':
+          evaluation = this.state.leftOperand * parseFloat(this.state.output);
+          break;
+      }
       this.clearLeftOperand();
+      this.clearOperator();
+      this.setOutput(evaluation);
     }
   }
 
