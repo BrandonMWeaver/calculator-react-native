@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 export default function CalculatorButton(props) {
     return (
       <View style={styles.container}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => props.callback()}>
                 <Text style={styles.button}>{props.value}</Text>
             </TouchableOpacity>
       </View>
