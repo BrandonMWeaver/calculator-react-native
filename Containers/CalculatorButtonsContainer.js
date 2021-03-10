@@ -7,7 +7,7 @@ export default function CalculatorButtonsContainer(props) {
     return (
       <View style={styles.container}>
           {props.buttons.map((button, index) => {
-              return <CalculatorButton key={index} value={button.value} callback={button.callback} />
+              return <CalculatorButton key={index} value={button.value} color={button.color} callback={button.callback} />
           })}
       </View>
     );

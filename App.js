@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
+import { Alert, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 
 import Output from './Components/Output';
 import CalculatorButtonsContainer from './Containers/CalculatorButtonsContainer';
@@ -10,22 +10,31 @@ export default class App extends Component {
     leftOperand: null,
     operator: null,
     calculatorButtons: [
-      { value: 'c', callback: () => this.clearState() },
-      { value: '1', callback: () => this.updateOutput('1') },
-      { value: '2', callback: () => this.updateOutput('2') },
-      { value: '3', callback: () => this.updateOutput('3') },
-      { value: '4', callback: () => this.updateOutput('4') },
-      { value: '5', callback: () => this.updateOutput('5') },
-      { value: '6', callback: () => this.updateOutput('6') },
-      { value: '7', callback: () => this.updateOutput('7') },
-      { value: '8', callback: () => this.updateOutput('8') },
-      { value: '9', callback: () => this.updateOutput('9') },
-      { value: '0', callback: () => this.updateOutput('0') },
-      { value: '-', callback: () => this.evaluate('-') },
-      { value: '+', callback: () => this.evaluate('+') },
-      { value: '/', callback: () => this.evaluate('/') },
-      { value: '*', callback: () => this.evaluate('*') },
-      { value: '=', callback: () => this.evaluate() },
+      { value: 'c', color: "#9b9b9b", callback: () => this.clearState() },
+      { value: '1', color: "#ff9b05", callback: () => this.updateOutput('1') },
+      { value: '2', color: "#ff9b05", callback: () => this.updateOutput('2') },
+      { value: '3', color: "#ff9b05", callback: () => this.updateOutput('3') },
+      { value: '4', color: "#ff9b05", callback: () => this.updateOutput('4') },
+      { value: '5', color: "#ff9b05", callback: () => this.updateOutput('5') },
+      { value: '6', color: "#ff9b05", callback: () => this.updateOutput('6') },
+      { value: '7', color: "#ff9b05", callback: () => this.updateOutput('7') },
+      { value: '8', color: "#ff9b05", callback: () => this.updateOutput('8') },
+      { value: '9', color: "#ff9b05", callback: () => this.updateOutput('9') },
+      { value: '0', color: "#ff9b05", callback: () => this.updateOutput('0') },
+      { value: '.', color: "#ff9b05", callback: async () => {
+        if (this.state.output.includes('.')) {
+          await this.setState({
+            output: this.state.output.replace('.', '')
+          });
+        }
+        this.updateOutput('.');
+      } },
+      { value: '-', color: "#ffcd05", callback: () => this.evaluate('-') },
+      { value: '+', color: "#ffcd05", callback: () => this.evaluate('+') },
+      { value: '/', color: "#ffcd05", callback: () => this.evaluate('/') },
+      { value: '*', color: "#ffcd05", callback: () => this.evaluate('*') },
+      { value: '=', color: "#9b9b9b", callback: () => this.evaluate() },
+      { value: '←', color: "#9b9b9b", callback: () => this.setState({ output: this.state.output.slice(0, -1) }) }
     ]
   }
 
@@ -80,50 +89,52 @@ export default class App extends Component {
   }
 
   evaluate(operator = null) {
-    if (!this.state.leftOperand && operator) {
-      this.setLeftOperand(parseFloat(this.state.output));
-      this.setOperator(operator);
-      this.clearOutput();
-    }
-    else if (operator) {
-      let evaluation;
-      switch (this.state.operator) {
-        case '-':
-          evaluation = this.state.leftOperand - parseFloat(this.state.output);
-          break;
-        case '+':
-          evaluation = this.state.leftOperand + parseFloat(this.state.output);
-          break;
-        case '/':
-          evaluation = this.state.leftOperand / parseFloat(this.state.output);
-          break;
-        case '*':
-          evaluation = this.state.leftOperand * parseFloat(this.state.output);
-          break;
+    if (this.state.output !== '') {
+      if (!this.state.leftOperand && operator) {
+        this.setLeftOperand(parseFloat(this.state.output));
+        this.setOperator(operator);
+        this.clearOutput();
       }
-      this.setLeftOperand(evaluation);
-      this.setOperator(operator);
-      this.clearOutput();
-    }
-    else {
-      let evaluation;
-      switch (this.state.operator) {
-        case '-':
-          evaluation = this.state.leftOperand - parseFloat(this.state.output);
-          break;
-        case '+':
-          evaluation = this.state.leftOperand + parseFloat(this.state.output);
-          break;
-        case '/':
-          evaluation = this.state.leftOperand / parseFloat(this.state.output);
-          break;
-        case '*':
-          evaluation = this.state.leftOperand * parseFloat(this.state.output);
-          break;
+      else if (operator) {
+        let evaluation;
+        switch (this.state.operator) {
+          case '-':
+            evaluation = this.state.leftOperand - parseFloat(this.state.output);
+            break;
+          case '+':
+            evaluation = this.state.leftOperand + parseFloat(this.state.output);
+            break;
+          case '/':
+            evaluation = this.state.leftOperand / parseFloat(this.state.output);
+            break;
+          case '*':
+            evaluation = this.state.leftOperand * parseFloat(this.state.output);
+            break;
+        }
+        this.setLeftOperand(evaluation);
+        this.setOperator(operator);
+        this.clearOutput();
       }
-      this.clearLeftOperand();
-      this.clearOperator();
-      this.setOutput(evaluation);
+      else if (this.state.leftOperand) {
+        let evaluation;
+        switch (this.state.operator) {
+          case '-':
+            evaluation = this.state.leftOperand - parseFloat(this.state.output);
+            break;
+          case '+':
+            evaluation = this.state.leftOperand + parseFloat(this.state.output);
+            break;
+          case '/':
+            evaluation = this.state.leftOperand / parseFloat(this.state.output);
+            break;
+          case '*':
+            evaluation = this.state.leftOperand * parseFloat(this.state.output);
+            break;
+        }
+        this.clearLeftOperand();
+        this.clearOperator();
+        this.setOutput(evaluation.toString());
+      }
     }
   }
 

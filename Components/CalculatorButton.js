@@ -5,7 +5,7 @@ export default function CalculatorButton(props) {
     return (
       <View style={styles.container}>
             <TouchableOpacity onPress={() => props.callback()}>
-                <Text style={styles.button}>{props.value}</Text>
+                <Text style={{...styles.button, backgroundColor: props.color}}>{props.value}</Text>
             </TouchableOpacity>
       </View>
     );
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingLeft: 10,
         width: "25%",
-        height: "25%"
+        height: "20%"
     },
     button: {
         padding: 10,
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
         fontFamily: "monospace",
         fontSize: 20,
         color: "#fff",
-        backgroundColor: "#ffcd05",
         borderRadius: 10
     }
 });
