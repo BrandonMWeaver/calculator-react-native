@@ -87,7 +87,7 @@ export default class App extends Component {
     }
     else if (operator) {
       let evaluation;
-      switch (operator) {
+      switch (this.state.operator) {
         case '-':
           evaluation = this.state.leftOperand - parseFloat(this.state.output);
           break;
