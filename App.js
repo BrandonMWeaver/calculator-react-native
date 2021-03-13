@@ -65,9 +65,11 @@ export default class App extends Component {
   }
 
   updateOutput(value) {
-    this.setState({
-      output: `${this.state.output}${value}`
-    });
+    if (!this.state.output.includes('.') || this.state.output.split('.')[1].length < 10) {
+      this.setState({
+        output: `${this.state.output}${value}`
+      });
+    }
   }
 
   setOutput(value) {
@@ -111,7 +113,7 @@ export default class App extends Component {
             evaluation = this.state.leftOperand * parseFloat(this.state.output);
             break;
         }
-        this.setLeftOperand(evaluation);
+        this.setLeftOperand(Math.round(evaluation + Number.EPSILON) * 1000000000000 / 1000000000000);
         this.setOperator(operator);
         this.clearOutput();
       }
@@ -133,7 +135,7 @@ export default class App extends Component {
         }
         this.clearLeftOperand();
         this.clearOperator();
-        this.setOutput(evaluation.toString());
+        this.setOutput((Math.round((evaluation + Number.EPSILON) * 1000000000000) / 1000000000000).toString());
       }
     }
   }
